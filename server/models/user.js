@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
-// var Login = require('./login');
-var Question = require('./question');
+
 var questionList = [
       { id: 0, question: "apple", answer: "pomme", correct: false},
       { id: 1, question: "book", answer:  "livre", correct: false},
@@ -38,6 +37,3 @@ var UserSchema = new mongoose.Schema({
 
 var User = mongoose.model('User', UserSchema);
 module.exports = User;
-
-
-// questions [e,f, hasUsergotitrightever][e,f][][][][]

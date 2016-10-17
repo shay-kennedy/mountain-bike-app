@@ -50,23 +50,7 @@ var mapStateToProps = function(state, props) {
 		score: state.score
 	} 
 }
-// var mapDispatchToProps = function(dispatch) {
-// 	return {
-// 		guessAnswer: function(result) {
-// 			dispatch(actions.guessAnswer(result));
 
-// 		},
-// 		putData: function(result, userId) {
-// 			dispatch(actions.putData(result, userId));
-
-// 		},
-// 		fetchUser: function() {
-// 			dispatch(actions.fetchUser());
-
-// 		}
-
-// 	}
-// }
 var Container = connect(mapStateToProps)(Questions);
 
 module.exports = Container;

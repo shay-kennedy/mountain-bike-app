@@ -2,11 +2,6 @@ var React = require("react");
 
 
 var Login = function() {
-	// submit: function(e) {
-	// 	console.log('login button worked');
-	// 	e.preventDefault();
-	// 	this.props.dispatch(actions.fetchUser());
-	// },
 		return (
 			<div>
 				<form>
@@ -15,6 +10,5 @@ var Login = function() {
 			</div>
 		)
 };
-
 
 module.exports = Login;
