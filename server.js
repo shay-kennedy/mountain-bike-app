@@ -97,28 +97,8 @@ app.get('/user', passport.authenticate('bearer', {session: false}),
     return res.send(req.user);
 });
 
-//TODO: finish implementing this function
 app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
   function(req, res) {
-  // console.log('req.body', req.body, req.body.user.id)
-     //    User.findOneAndUpdate(
-     //      { googleID: req.params.googleID, questions: {$elemMatch: {id:req.body.user.id}} },
-     //      {
-     //        $set: {correct: req.body.user.correct}
-     //        // score: req.body.score
-
-     //      },
-     //    {
-     //      'new': true
-     //    },
-
-     //     function(err, user) {
-     //      if(err) {
-     //        return res.send(err)
-     //      }
-     //      return res.send(user);
-     // });
-
     User.update({"googleID": req.params.googleID}, {"$set" : {"favorites": req.body.score}},
       function(err, user) {
         if(err) {
@@ -130,17 +110,17 @@ app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
     console.log("body", req.body);
   });
 
-
 // get API data for trails
-app.get('/trails', function(req, res) {
-  unirest.get("https://trailapi-trailapi.p.mashape.com/?q[activities_activity_type_name_eq]=mountain+biking&q[city_cont]=Phoenix&q[state_cont]=Arizona&radius=25")
-  .header("X-Mashape-Key", "Njf9yX0QmImshN5LtDdUS9MQcM68p1BVQxqjsna4e89QJjc3NI")
-  .header("Accept", "text/plain")
+app.get('/trails/:city/:state', function(req, res) {
+  var city = req.params.city;
+  var state = req.params.state;
+  unirest.get('https://trailapi-trailapi.p.mashape.com/?q[activities_activity_type_name_eq]=mountain+biking&q[city_cont]=' + city + '&q[state_cont]=' + state + '&radius=50')
+  .header('X-Mashape-Key', 'Njf9yX0QmImshN5LtDdUS9MQcM68p1BVQxqjsna4e89QJjc3NI')
+  .header('Accept', 'text/plain')
   .end(function (result) {
     return res.send(result.body);
   })  
 });
-
 
 
 app.listen(8080, function() {

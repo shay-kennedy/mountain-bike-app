@@ -29,14 +29,7 @@ var Input = React.createClass({
 	);
 }});
 
-var mapStateToProps = function(state, props) {
-	return {
-		id: state.googleID,
-		question: state.question,
-		score: state.score
-	} 
-}
 
-var Container = connect(mapStateToProps)(Input);
+var Container = connect()(Input);
 
 module.exports = Container;
