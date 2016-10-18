@@ -53,7 +53,6 @@ passport.use(new GoogleStrategy({
         User.create({
           googleID: profile.id,
           accessToken: accessToken,
-          score: 0,
           fullName: profile.displayName
         }, function(err, users) {
           console.log('=======>>', err, users[0])
@@ -126,7 +125,7 @@ app.get('/auth/google/callback',
     res.cookie("accessToken", req.user[0].accessToken, {expires: 0});
     // httpOnly: true
         // Successful authentication, redirect home.
-    res.redirect('/#/quiz');
+    res.redirect('/#/trails');
   }
 );
 

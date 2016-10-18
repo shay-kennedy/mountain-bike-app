@@ -63,10 +63,6 @@ var putData = function(user, score, userId) {
   return function(dispatch) {
     var token = Cookies.get('accessToken');
     console.log("putdata");
-    // var headers = new Headers({
-        
-    //     Authorization: 'bearer ' + token
-    // });
     var url = 'http://localhost:8080/user/'+userId;
   return fetch(url,
   {
