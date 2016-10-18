@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+var unirest = require('unirest');
 
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var BearerStrategy = require('passport-http-bearer').Strategy;
@@ -16,7 +17,6 @@ var db = 'mongodb://localhost:27017/mtb-trails';
 
 mongoose.connect(db);
 app.use(passport.initialize());
-// app.use(passport.serializeUser());
 app.use('/', express.static('build'));
 app.use(bodyParser.json());
 
@@ -32,49 +32,30 @@ app.get('/app', function(req, res) {
 });
 
 passport.use(new GoogleStrategy({
-
   clientID: config.googleAuth.clientID,
   clientSecret: config.googleAuth.clientSecret,
   callbackURL: config.googleAuth.callbackURL,
-
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log('PROFILE', profile);
-    // var user = {
-    //     googleID: profile.id,
-    //     accessToken: accessToken
-    // }
-     // return done(null, user);
     User.find({
       'googleID': profile.id
     }, function(err, users) {
-      console.log('users', users.length)
       if (!users.length) {
         User.create({
           googleID: profile.id,
           accessToken: accessToken,
           fullName: profile.displayName
         }, function(err, users) {
-          console.log('=======>>', err, users[0])
           return done(err, users[0]);
         });
       } else {
-        // update user with new tokens
         return done(err, users);
       }
     });
-  }));
+}));
 
 
 passport.use(new BearerStrategy(
-  // function(token, done) {
-  //     console.log(token);
-  //     if (token == "ya29.CjB0A2ldOpp9zilFcam6tIkGkADUBON2blsU-ozKvrrmmuqLg-Qnz9iJoHyA2fQRW0Y") {
-  //           var user = {user: 'bob'}
-  //         return done(null, user, {scope: 'read'});
-  //     }
-  //     return done(null, false);
-  // }
   function(token, done) {
   User.find({ accessToken: token },
     function(err, users) {
@@ -90,19 +71,6 @@ passport.use(new BearerStrategy(
 }
 ));
 
-
-// app.get('/login',
-//     passport.authenticate('google', {
-//         scope: ['profile']
-//     }),
-//     function(req, res) {
-//         // res.send(req.user);
-//         console.log("it works");
-
-//     });
-
-
-// route for logging out
 app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
@@ -119,12 +87,7 @@ app.get('/auth/google/callback',
     session: false
   }),
   function(req, res) {
-    console.log('req', req);
-    console.log('req.user', req.user);
-    console.log('req.user.accessToken', req.user[0].accessToken);
     res.cookie("accessToken", req.user[0].accessToken, {expires: 0});
-    // httpOnly: true
-        // Successful authentication, redirect home.
     res.redirect('/#/trails');
   }
 );
@@ -156,7 +119,7 @@ app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
      //      return res.send(user);
      // });
 
-    User.update({"googleID": req.params.googleID, "questions.id" : req.body.user.id}, {"$set" : {"questions.$.correct" : req.body.user.correct, "score": req.body.score}},
+    User.update({"googleID": req.params.googleID}, {"$set" : {"favorites": req.body.score}},
       function(err, user) {
         if(err) {
           return res.send(err)
@@ -165,13 +128,19 @@ app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
 
       });
     console.log("body", req.body);
-
-
-     
-    
-      //udpate db and return true/false
-      //return res.send({questions:'PUT QUESTIONS HERE'});
   });
+
+
+// get API data for trails
+app.get('/trails', function(req, res) {
+  unirest.get("https://trailapi-trailapi.p.mashape.com/?q[activities_activity_type_name_eq]=mountain+biking&q[city_cont]=Phoenix&q[state_cont]=Arizona&radius=25")
+  .header("X-Mashape-Key", "Njf9yX0QmImshN5LtDdUS9MQcM68p1BVQxqjsna4e89QJjc3NI")
+  .header("Accept", "text/plain")
+  .end(function (result) {
+    return res.send(result.body);
+  })  
+});
+
 
 
 app.listen(8080, function() {

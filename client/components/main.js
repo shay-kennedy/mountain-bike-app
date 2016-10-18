@@ -5,7 +5,6 @@ var Login = require('./login');
 var Input = require('./input');
 
 var Main = function(props) {
-	console.log('Hello world');
 	return (		
 		<div>
 			{props.children}

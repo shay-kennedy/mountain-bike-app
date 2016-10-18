@@ -1,6 +1,7 @@
 require('isomorphic-fetch');
 var Cookies = require("js-cookie");
 
+
 var FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 var fetchUserSuccess = function(user, score, answer) {
   return {
@@ -11,7 +12,7 @@ var fetchUserSuccess = function(user, score, answer) {
   };
 };
 
-var FETCH_USER_ERROR= 'FETCH_USER_ERROR';
+var FETCH_USER_ERROR = 'FETCH_USER_ERROR';
 var fetchUserError = function(error) {
   return {
     type: FETCH_USER_ERROR,
@@ -19,13 +20,20 @@ var fetchUserError = function(error) {
   };
 };
 
-var GUESS_ANSWER = 'GUESS_ANSWER';
-var guessAnswer =function(answer, user) {
+var FETCH_TRAILS_SUCCESS = 'FETCH_TRAILS_SUCCESS';
+var fetchTrailsSuccess = function(trails) {
   return {
-    type: GUESS_ANSWER,
-    answer: answer,
-    user: user
-  }
+    type: FETCH_TRAILS_SUCCESS,
+    trails: trails
+  };
+};
+
+var FETCH_TRAILS_ERROR = 'FETCH_TRAILS_ERROR';
+var fetchTrailsError = function(error) {
+  return {
+    type: FETCH_TRAILS_ERROR,
+    error: error
+  };
 };
 
 var fetchUser = function() {
@@ -95,11 +103,54 @@ var putData = function(user, score, userId) {
   }
 };
 
+var getTrails = function(location) {
+  console.log('Location', location);
+  return function(dispatch) {
+    // console.log('LOC', location);
+    // var cityAndRest = location.split(',');
+    // var city = cityAndRest[0];
+    // var stateAndZip = cityAndRest[1].trim().split(' ');
+    // var state = stateAndZip[0];
+    // var zip = stateAndZip[1];
+   
+    // return fetch("https://trailapi-trailapi.p.mashape.com/?q[activities_activity_type_name_eq]=mountain+biking&q[city_cont]=Phoenix&q[state_cont]=Arizona&radius=25",
+    //   {
+    //     method: 'get',
+    //     headers: {'Content-type': 'application/json', 'X-Mashape-Key': 'Njf9yX0QmImshN5LtDdUS9MQcM68p1BVQxqjsna4e89QJjc3NI'}
+    //   }
+    // )
+
+    var url = 'http://localhost:8080/trails';
+    return fetch(url, {headers: headers}).then(function(response) {
+      if (response.status < 200 || response.status >= 300) {
+        var error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+      return response.json();
+    })
+    .then(function(trails) {
+        console.log("TRAILS", trails);
+      return dispatch(
+        fetchTrailsSuccess(trails)
+      );
+    })
+    .catch(function(error) {
+      return dispatch(
+        fetchTrailsError(error)
+      );
+    });
+  }
+};
+
 exports.fetchUser = fetchUser;
+exports.fetchUserSuccess = fetchUserSuccess;
+exports.fetchUserError = fetchUserError;
 exports.FETCH_USER_SUCCESS = FETCH_USER_SUCCESS;
 exports.FETCH_USER_ERROR = FETCH_USER_ERROR;
-exports.fetchUserError = fetchUserError;
-exports.fetchUserSuccess = fetchUserSuccess;
-exports.GUESS_ANSWER = GUESS_ANSWER;
-exports.guessAnswer = guessAnswer;
 exports.putData = putData;
+exports.getTrails = getTrails;
+exports.fetchTrailsSuccess = fetchTrailsSuccess;
+exports.fetchTrailsError = fetchTrailsError;
+exports.FETCH_TRAILS_SUCCESS = FETCH_TRAILS_SUCCESS;
+exports.FETCH_TRAILS_SUCCESS = FETCH_TRAILS_SUCCESS;
