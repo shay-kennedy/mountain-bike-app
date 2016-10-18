@@ -5,10 +5,12 @@ var Input = require('./input');
 
 
 var TrailsList = React.createClass({
-	render: function() {
+	
+	render: function(props) {
+		console.log('HERE', this.props.trails);
 		return (
 			<div>
-				Render list of trails from API here
+				{this.props.trails}
 			</div>
 		)
 	}
@@ -16,7 +18,6 @@ var TrailsList = React.createClass({
 
 var mapStateToProps = function(state, props) {
 	return {
-		id: state.userId,
 		trails: state.trails,
 	} 
 }
