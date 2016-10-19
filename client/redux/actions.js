@@ -37,7 +37,6 @@ var getTrailsError = function(error) {
 var fetchUser = function() {
   return function(dispatch) {
     var token = Cookies.get('accessToken');
-    console.log(token);
   	var headers = new Headers({
   		Authorization: 'bearer ' + token
   	});
@@ -101,14 +100,22 @@ var updateFavorites = function(props) {
   console.log('ACTION SIDE PROPS', props)
   return function(dispatch) {
     var token = Cookies.get('accessToken');
-    var url = 'http://localhost:8080/user/'+userId;
+    var url = 'http://localhost:8080/user/'+props.userId;
   return fetch(url,
   {
     method: 'put',
     headers: {'Content-type': 'application/json', 'Authorization': 'bearer ' + token},
     body: JSON.stringify({
-        user: user,
-        score: score
+      favorites: {
+        'name': props.name,
+        'city': props.city,
+        'state': props.state,
+        'url': props.url,
+        'length': props.length,
+        'description': props.description,
+        'directions': props.directions,
+        'trail_id': props.trail_id
+      }
     })
   }
     ).then(function(response) {
@@ -122,7 +129,7 @@ var updateFavorites = function(props) {
     .then(function(user) {
       console.log('Data', user)
       return dispatch(
-        fetchUserSuccess(user, score)
+        fetchUserSuccess(user)
         );
     })
     .catch(function(error) {
@@ -133,7 +140,37 @@ var updateFavorites = function(props) {
   }
 };
 
-
+var removeFavorite = function(props) {
+  console.log('ACTION SIDE PROPS', props)
+  return function(dispatch) {
+    var token = Cookies.get('accessToken');
+    var url = 'http://localhost:8080/user/favorite/'+props.favorite_id;
+  return fetch(url,
+  {
+    method: 'delete',
+    headers: {'Content-type': 'application/json', 'Authorization': 'bearer ' + token}
+  }
+    ).then(function(response) {
+      if(response.status < 200 || response.status > 300) {
+        var error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+      return response.json();
+    })
+    .then(function(user) {
+      console.log('Data', user)
+      return dispatch(
+        fetchUserSuccess(user)
+        );
+    })
+    .catch(function(error) {
+      return dispatch(
+        fetchUserError(error)
+        );
+    });
+  }
+};
 
 exports.fetchUser = fetchUser;
 exports.fetchUserSuccess = fetchUserSuccess;

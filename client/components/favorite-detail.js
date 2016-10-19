@@ -5,11 +5,11 @@ var TrailsMain = require('./main-trails');
 
 
 
-var TrailDetail = React.createClass ({			
-	addToFavorites: function() {
-		console.log('ITEM ADDED');
-		console.log('THIS.PROPS', this.props);
-		this.props.dispatch(actions.updateFavorites(this.props));
+var FavoriteDetail = React.createClass ({			
+	removeFromFavorites: function() {
+		console.log('ITEM REMOVED');
+		console.log('THIS.PROPS for ITEM REMOVED', this.props);
+		// this.props.dispatch(actions.removeFavorite(this.props));
 	},
 	render: function() {
 		// console.log('PROPS', this.props);
@@ -52,7 +52,7 @@ var TrailDetail = React.createClass ({
 				<p>Track Length: {this.props.length} miles</p>				
 				<p>Description: {description}</p>
 				<p>Directions: {directions}</p>
-				<button onClick={this.addToFavorites} >Add to Favorites</button>
+				<button onClick={this.removeFromFavorites} >Remove from Favorites</button>
 			</div>
 		)
 	}
@@ -68,7 +68,7 @@ var mapStateToProps = function(state, props) {
 	} 
 }
 
-var Container = connect(mapStateToProps)(TrailDetail);
+var Container = connect(mapStateToProps)(FavoriteDetail);
 
 module.exports = Container;
 

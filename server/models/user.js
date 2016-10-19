@@ -1,11 +1,13 @@
 var mongoose = require('mongoose');
 
 var UserSchema = new mongoose.Schema({
-
-  googleID: { type: String, index: true },
+  googleID: { 
+    type: String, 
+    index: true 
+  },
   accessToken: {
-      type: String,
-      required: true
+    type: String,
+    required: true
   },
 	favorites: {
     type: Array,

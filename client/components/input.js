@@ -1,8 +1,11 @@
 var React = require("react");
 var connect = require('react-redux').connect;
 var actions = require('../redux/actions');
+var router = require('react-router');
+var Link = router.Link;
 	
 var Input = React.createClass({
+
 	onFormSubmit: function(event){
 		event.preventDefault();
 		var location = this.refs.location.value;
@@ -13,12 +16,13 @@ var Input = React.createClass({
 	render: function(){
 	return (
 		<div>
-			<form onSubmit={this.onFormSubmit}>
-				<input placeholder='Enter City and State' ref="location" />
-				<span>
+			
+			<form onSubmit={this.onFormSubmit} >				
+					<input placeholder='Enter City and State' ref="location" />
 					<button type='submit'>Search</button>
-				</span>
+								
 			</form>
+			
 		</div>
 	);
 }});

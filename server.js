@@ -20,16 +20,6 @@ app.use(passport.initialize());
 app.use('/', express.static('build'));
 app.use(bodyParser.json());
 
-app.get('/app', function(req, res) {
-  User.find({})
-    .exec(function(err, users) {
-      if (err) {
-        res.send("Error has occured")
-      } else {
-        res.json(users);
-      }
-    });
-});
 
 passport.use(new GoogleStrategy({
   clientID: config.googleAuth.clientID,
@@ -44,6 +34,7 @@ passport.use(new GoogleStrategy({
         User.create({
           googleID: profile.id,
           accessToken: accessToken,
+          favorites: [],
           fullName: profile.displayName
         }, function(err, users) {
           return done(err, users[0]);
@@ -53,7 +44,6 @@ passport.use(new GoogleStrategy({
       }
     });
 }));
-
 
 passport.use(new BearerStrategy(
   function(token, done) {
@@ -92,20 +82,37 @@ app.get('/auth/google/callback',
   }
 );
 
-app.get('/user', passport.authenticate('bearer', {session: false}), 
-  function(req, res) {
-    return res.send(req.user);
+app.get('/user', passport.authenticate('bearer', {session: false}), function(req, res) {
+  User.find({}, function(err, users) {
+    if (err) {
+      res.send("Error has occured")
+    } else {
+      res.json(users);
+    }
+  });
 });
+
+// app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
+//   function(req, res) {
+//     User.update({"googleID": req.params.googleID}, {"$push" : {"favorites": req.body.favorites}},
+//       function(err, user) {
+//         if(err) {
+//           return res.send(err)
+//         }
+//         console.log("response", user);
+//         return res.send(user);
+//       });
+//     console.log("body", req.body);
+//   });
 
 app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
   function(req, res) {
-    User.update({"googleID": req.params.googleID}, {"$set" : {"favorites": req.body.score}},
+    User.update({"googleID": req.params.googleID}, {"$push" : {"favorites": req.body.favorites}},
       function(err, user) {
         if(err) {
           return res.send(err)
         }
-        return res.send(user);
-
+        return res.send({message: "Favorite added!"});
       });
     console.log("body", req.body);
   });
@@ -118,8 +125,9 @@ app.get('/trails/:city/:state', function(req, res) {
   .header('X-Mashape-Key', 'Njf9yX0QmImshN5LtDdUS9MQcM68p1BVQxqjsna4e89QJjc3NI')
   .header('Accept', 'text/plain')
   .end(function (result) {
+    // res.redirect('/#/trails/list');
     return res.send(result.body);
-  })  
+  });
 });
 
 
