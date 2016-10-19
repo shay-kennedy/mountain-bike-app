@@ -5,15 +5,9 @@ var actions = require('../redux/actions');
 var Input = React.createClass({
 	onFormSubmit: function(event){
 		event.preventDefault();
-
-		// Grabs the value from the input on submit
 		var location = this.refs.location.value;
-		console.log('LOCATION ', location);
-		
-		// Dispatched action to get trails based on user input
+		// console.log('INPUT LOCATION', location);		
 		this.props.dispatch(actions.getTrails(location));
-		
-		// Clears the value on Submit
 		this.refs.location.value = '';
 	},
 	render: function(){

@@ -2,8 +2,8 @@ var React = require("react");
 var Provider = require('react-redux').Provider;
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import Main from './main';
-import TrailsMain from './trails-main';
-import Login from './login';
+import TrailsMain from './main-trails';
+import Login from './main-login';
 import store from '../redux/store';
 
 
