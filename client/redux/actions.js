@@ -50,7 +50,7 @@ var fetchUser = function() {
       return response.json();
     })
     .then(function(user) {
-        console.log("USER", user);
+        // console.log("USER", user);
       return dispatch(
         fetchUserSuccess(user)
       );
@@ -96,8 +96,8 @@ var getTrails = function(location) {
   }
 };
 
-var updateFavorites = function(props) {
-  console.log('ACTION SIDE PROPS', props)
+var addFavorite = function(props) {
+  console.log('ADD FAVORITE PROPS', props)
   return function(dispatch) {
     var token = Cookies.get('accessToken');
     var url = 'http://localhost:8080/user/'+props.userId;
@@ -126,10 +126,10 @@ var updateFavorites = function(props) {
       }
       return response.json();
     })
-    .then(function(user) {
-      console.log('Data', user)
+    .then(function(response) {
+      console.log('ADD FAVORITE RETURN', response)
       return dispatch(
-        fetchUserSuccess(user)
+        fetchUserSuccess(response)
         );
     })
     .catch(function(error) {
@@ -141,14 +141,17 @@ var updateFavorites = function(props) {
 };
 
 var removeFavorite = function(props) {
-  console.log('ACTION SIDE PROPS', props)
+  console.log('REMOVE FAVORITE PROPS', props)
   return function(dispatch) {
     var token = Cookies.get('accessToken');
-    var url = 'http://localhost:8080/user/favorites/'+props.favorite_id;
+    var url = 'http://localhost:8080/user/favorites/'+props.trail_id;
   return fetch(url,
   {
     method: 'put',
-    headers: {'Content-type': 'application/json', 'Authorization': 'bearer ' + token}
+    headers: {'Content-type': 'application/json', 'Authorization': 'bearer ' + token},
+    body: JSON.stringify({
+      'googleID': props.userId
+    })
   }
     ).then(function(response) {
       if(response.status < 200 || response.status > 300) {
@@ -158,10 +161,10 @@ var removeFavorite = function(props) {
       }
       return response.json();
     })
-    .then(function(user) {
-      console.log('RemoveFavorite Return', user)
+    .then(function(response) {
+      console.log('REMOVE FAVORITE RETURN', response)
       return dispatch(
-        fetchUserSuccess(user)
+        fetchUserSuccess()
         );
     })
     .catch(function(error) {
@@ -182,4 +185,5 @@ exports.getTrailsSuccess = getTrailsSuccess;
 exports.getTrailsError = getTrailsError;
 exports.GET_TRAILS_SUCCESS = GET_TRAILS_SUCCESS;
 exports.GET_TRAILS_ERROR = GET_TRAILS_ERROR;
-exports.updateFavorites = updateFavorites;
+exports.addFavorite = addFavorite;
+exports.removeFavorite = removeFavorite;

@@ -125,28 +125,61 @@ app.get('/user', passport.authenticate('bearer', {session: false}), function(req
   });
 });
 
-app.put('/user/favorites/:favorite_id', passport.authenticate('bearer', {session: false}),
-  function(req, res) {
-    User.update({"googleID": req.params.googleID}, {"$push" : {"favorites": req.body.favorites}},
-      function(err, user) {
-        if(err) {
-          return res.send(err)
-        }
-        return res.send({message: "Favorite added!"});
-      });
-    console.log("body", req.body);
-  });
+// passport.use(new GoogleStrategy({
+//   clientID: config.googleAuth.clientID,
+//   clientSecret: config.googleAuth.clientSecret,
+//   callbackURL: config.googleAuth.callbackURL,
+//   },
+//   function(accessToken, refreshToken, profile, done) {
+//     User.find({googleID: profile.id}, function(err, user) {
+//       if (!user.length) {
+//         User.create({
+//           googleID: profile.id,
+//           accessToken: accessToken,
+//           favorites: [],
+//           fullName: profile.displayName
+//         }, function(err, users) {
+//           return done(err, user);
+//         });
+//       } else {
+//         return done(err, user);
+//       }
+//     });
+// }));
 
+
+// add to favorites
 app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
   function(req, res) {
-    User.update({"googleID": req.params.googleID}, {"$push" : {"favorites": req.body.favorites}},
+    console.log('Add Favorite Hit the Server!');
+    User.update({'googleID': req.params.googleID}, {'$push' : {'favorites': req.body.favorites}},
       function(err, user) {
         if(err) {
           return res.send(err)
         }
         return res.send({message: "Favorite added!"});
       });
-    console.log("body", req.body);
+    // console.log("body", req.body);
+  });
+
+// remove from favorites
+app.put('/user/favorites/:trail_id', passport.authenticate('bearer', {session: false}),
+  function(req, res) {
+    console.log('Remove Favorite Hit the Server!');
+    console.log('req.body.googleID', req.body.googleID);
+    console.log('req.params.trail_id', req.params.trail_id);
+    var trailID = parseInt(req.params.trail_id);
+    var googleID = req.body.googleID;
+    console.log('QUERY INFO', trailID, googleID);
+    User.update( { 'favorites.trail_id':trailID, 'googleID':googleID }, 
+                  { $pull : { 'favorites':{ 'trail_id':trailID } } },
+                  { new: true },
+      function(err, user) {
+        if(err) {
+          return res.send(err)
+        }
+        return res.send({message: "Favorite removed!"});
+      });
   });
 
 // get API data for trails

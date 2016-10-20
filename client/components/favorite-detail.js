@@ -7,9 +7,9 @@ var TrailsMain = require('./trails-main');
 
 var FavoriteDetail = React.createClass ({			
 	removeFromFavorites: function() {
-		console.log('ITEM REMOVED');
-		console.log('THIS.PROPS for ITEM REMOVED', this.props);
-		// this.props.dispatch(actions.removeFavorite(this.props));
+		// console.log('ITEM REMOVED');
+		this.props.dispatch(actions.removeFavorite(this.props));
+		this.props.dispatch(actions.fetchUser());
 	},
 	render: function() {
 		// console.log('PROPS', this.props);

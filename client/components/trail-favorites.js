@@ -8,16 +8,16 @@ var FavoriteDetail = require('./favorite-detail');
 var TrailFavorites = React.createClass({
 	componentDidMount: function() {
 		this.props.dispatch(actions.fetchUser());
-		console.log('CDM PROPS', this.props);
+		// console.log('CDM PROPS', this.props);
 	},
 
 	render: function(props) {
-		console.log('RENDER PROPS', this.props);
+		// console.log('Trail Favorites Props', this.props);
 		var favoriteList = this.props.favorites.map(function(favorite) {
 			return (
 				<FavoriteDetail 
 					key={favorite.trail_id}
-					favorite_id={favorite.trail_id}
+					trail_id={favorite.trail_id}
 					city={favorite.city} 
 					state={favorite.state} 
 					name={favorite.name}

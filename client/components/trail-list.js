@@ -8,11 +8,11 @@ var TrailDetail = require('./trail-detail');
 var TrailList = React.createClass({
 	componentDidMount: function() {
 		this.props.dispatch(actions.fetchUser());
-		console.log('CDM PROPS', this.props);
+		// console.log('CDM PROPS', this.props);
 	},
 
 	render: function(props) {
-		console.log('RENDER PROPS', this.props);
+		// console.log('TRAIL LIST PROPS', this.props);
 		var trailList = this.props.trails.places.map(function(trail) {
 			return (
 				<TrailDetail 

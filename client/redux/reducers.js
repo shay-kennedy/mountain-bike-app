@@ -19,7 +19,7 @@ var reducer = function(state, action) {
 				favorites: user.favorites,
 				googleID: user.googleID
 			});
-			console.log('REDUCER STATE', state);
+			// console.log('FETCH_USER_SUCCESS State', state);
 			return state;
 		
 		case action.FETCH_USER_ERROR:
@@ -33,7 +33,7 @@ var reducer = function(state, action) {
 			state = Object.assign({}, state, {
 				trails: trails,
 			});
-			console.log('STATE', state);
+			// console.log('GET_TRAILS_SUCCESS State', state);
 			return state;
 
 		case action.GET_TRAILS_ERROR:

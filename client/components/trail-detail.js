@@ -8,8 +8,7 @@ var TrailsMain = require('./trails-main');
 var TrailDetail = React.createClass ({			
 	addToFavorites: function() {
 		console.log('ITEM ADDED');
-		console.log('THIS.PROPS', this.props);
-		this.props.dispatch(actions.updateFavorites(this.props));
+		this.props.dispatch(actions.addFavorite(this.props));
 	},
 	render: function() {
 		// console.log('PROPS', this.props);

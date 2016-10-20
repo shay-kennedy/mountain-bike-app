@@ -13,7 +13,7 @@ var Input = React.createClass({
 		if (location == '') {
 			alert('Please enter a location.');
 			return;
-		}
+		};
 		// console.log('INPUT LOCATION', location);		
 		this.props.dispatch(actions.getTrails(location));
 		this.refs.location.value = '';	
@@ -21,7 +21,7 @@ var Input = React.createClass({
 	render: function(){
 	return (
 		<div>
-			<input placeholder="Enter City and State" ref="location" />
+			<input placeholder='Enter City and State' ref="location" />
 			<button onClick={this.onSearch} >
 				<Link to={'/trails/list'} >Search</Link>
 			</button>					
@@ -49,3 +49,15 @@ module.exports = Container;
 // 		<Link to={'/trails/list'} >Search</Link>
 // 	</button>					
 // </div>
+
+// <div>
+// 	<form>
+// 		<Link to={'/trails/list'} >	
+// 			<input placeholder="Enter City and State" ref="location" type="text" required />
+// 			<button onClick={this.onSearch} >
+// 				Search
+// 			</button>
+// 		</Link>
+// 	</form>
+// </div>
+
