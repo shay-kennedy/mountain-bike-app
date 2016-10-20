@@ -6,9 +6,7 @@ var FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 var fetchUserSuccess = function(user, score, answer) {
   return {
     type: FETCH_USER_SUCCESS,
-    user: user,
-    score: score,
-    answer: answer
+    user: user
   };
 };
 
@@ -20,18 +18,18 @@ var fetchUserError = function(error) {
   };
 };
 
-var FETCH_TRAILS_SUCCESS = 'FETCH_TRAILS_SUCCESS';
-var fetchTrailsSuccess = function(trails) {
+var GET_TRAILS_SUCCESS = 'GET_TRAILS_SUCCESS';
+var getTrailsSuccess = function(trails) {
   return {
-    type: FETCH_TRAILS_SUCCESS,
+    type: GET_TRAILS_SUCCESS,
     trails: trails
   };
 };
 
-var FETCH_TRAILS_ERROR = 'FETCH_TRAILS_ERROR';
-var fetchTrailsError = function(error) {
+var GET_TRAILS_ERROR = 'GET_TRAILS_ERROR';
+var getTrailsError = function(error) {
   return {
-    type: FETCH_TRAILS_ERROR,
+    type: GET_TRAILS_ERROR,
     error: error
   };
 };
@@ -39,7 +37,6 @@ var fetchTrailsError = function(error) {
 var fetchUser = function() {
   return function(dispatch) {
     var token = Cookies.get('accessToken');
-    console.log(token);
   	var headers = new Headers({
   		Authorization: 'bearer ' + token
   	});
@@ -53,7 +50,7 @@ var fetchUser = function() {
       return response.json();
     })
     .then(function(user) {
-        console.log("USER", user);
+        // console.log("USER", user);
       return dispatch(
         fetchUserSuccess(user)
       );
@@ -66,53 +63,15 @@ var fetchUser = function() {
   }
 };
 
-var putData = function(user, score, userId) {
-  console.log('before put', user)
-  return function(dispatch) {
-    var token = Cookies.get('accessToken');
-    console.log("putdata");
-    var url = 'http://localhost:8080/user/'+userId;
-  return fetch(url,
-  {
-    method: 'put',
-    headers: {'Content-type': 'application/json', 'Authorization': 'bearer ' + token},
-    body: JSON.stringify({
-        user: user,
-        score: score
-    })
-  }
-    ).then(function(response) {
-      if(response.status < 200 || response.status > 300) {
-        var error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-      return response.json();
-    })
-    .then(function(user) {
-      console.log('Data', user)
-      return dispatch(
-        fetchUserSuccess(user, score)
-        );
-    })
-    .catch(function(error) {
-      return dispatch(
-        fetchUserError(error)
-        );
-    });
-  }
-};
-
 var getTrails = function(location) {
-  console.log('Location', location);
+  // console.log('Location', location);
   return function(dispatch) {
-    console.log('LOC', location);
     var cityAndRest = location.split(',');
     var city = cityAndRest[0];
     var stateAndZip = cityAndRest[1].trim().split(' ');
     var state = stateAndZip[0];
     var zip = stateAndZip[1];
-    console.log('CITY', city, 'STATE', state);
+    // console.log('CITY', city, 'STATE', state);
     var url = `http://localhost:8080/trails/${city}/${state}`;
     return fetch(url)
     .then(function(response) {
@@ -124,15 +83,94 @@ var getTrails = function(location) {
       return response.json();
     })
     .then(function(trails) {
-        console.log("TRAILS", trails);
+        // console.log("TRAILS", trails);
       return dispatch(
-        fetchTrailsSuccess(trails)
+        getTrailsSuccess(trails)
       );
     })
     .catch(function(error) {
       return dispatch(
-        fetchTrailsError(error)
+        getTrailsError(error)
       );
+    });
+  }
+};
+
+var addFavorite = function(props) {
+  console.log('ADD FAVORITE PROPS', props)
+  return function(dispatch) {
+    var token = Cookies.get('accessToken');
+    var url = 'http://localhost:8080/user/'+props.userId;
+  return fetch(url,
+  {
+    method: 'put',
+    headers: {'Content-type': 'application/json', 'Authorization': 'bearer ' + token},
+    body: JSON.stringify({
+      favorites: {
+        'name': props.name,
+        'city': props.city,
+        'state': props.state,
+        'url': props.url,
+        'length': props.length,
+        'description': props.description,
+        'directions': props.directions,
+        'trail_id': props.trail_id
+      }
+    })
+  }
+    ).then(function(response) {
+      if(response.status < 200 || response.status > 300) {
+        var error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+      return response.json();
+    })
+    .then(function(response) {
+      console.log('ADD FAVORITE RETURN', response)
+      return dispatch(
+        fetchUserSuccess(response)
+        );
+    })
+    .catch(function(error) {
+      return dispatch(
+        fetchUserError(error)
+        );
+    });
+  }
+};
+
+var removeFavorite = function(props) {
+  console.log('REMOVE FAVORITE PROPS', props)
+  return function(dispatch) {
+    var token = Cookies.get('accessToken');
+    var url = 'http://localhost:8080/user/favorites/'+props.trail_id;
+  return fetch(url,
+  {
+    method: 'put',
+    headers: {'Content-type': 'application/json', 'Authorization': 'bearer ' + token},
+    body: JSON.stringify({
+      'googleID': props.userId
+    })
+  }
+    ).then(function(response) {
+      if(response.status < 200 || response.status > 300) {
+        var error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+      return response.json();
+    })
+    .then(function(response) {
+      console.log('REMOVE FAVORITE RETURN', response)
+      return dispatch(
+        fetchUserSuccess()
+        );
+    })
+    .catch(function(error) {
+      return dispatch(
+        fetchUserError(error)
+        );
     });
   }
 };
@@ -142,9 +180,10 @@ exports.fetchUserSuccess = fetchUserSuccess;
 exports.fetchUserError = fetchUserError;
 exports.FETCH_USER_SUCCESS = FETCH_USER_SUCCESS;
 exports.FETCH_USER_ERROR = FETCH_USER_ERROR;
-exports.putData = putData;
 exports.getTrails = getTrails;
-exports.fetchTrailsSuccess = fetchTrailsSuccess;
-exports.fetchTrailsError = fetchTrailsError;
-exports.FETCH_TRAILS_SUCCESS = FETCH_TRAILS_SUCCESS;
-exports.FETCH_TRAILS_SUCCESS = FETCH_TRAILS_SUCCESS;
+exports.getTrailsSuccess = getTrailsSuccess;
+exports.getTrailsError = getTrailsError;
+exports.GET_TRAILS_SUCCESS = GET_TRAILS_SUCCESS;
+exports.GET_TRAILS_ERROR = GET_TRAILS_ERROR;
+exports.addFavorite = addFavorite;
+exports.removeFavorite = removeFavorite;
