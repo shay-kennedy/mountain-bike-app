@@ -97,7 +97,7 @@ var getTrails = function(location) {
 };
 
 var addFavorite = function(props) {
-  console.log('ADD FAVORITE PROPS', props)
+  // console.log('ADD FAVORITE PROPS', props)
   return function(dispatch) {
     var token = Cookies.get('accessToken');
     var url = 'http://localhost:8080/user/'+props.userId;
@@ -141,7 +141,7 @@ var addFavorite = function(props) {
 };
 
 var removeFavorite = function(props) {
-  console.log('REMOVE FAVORITE PROPS', props)
+  // console.log('REMOVE FAVORITE PROPS', props)
   return function(dispatch) {
     var token = Cookies.get('accessToken');
     var url = 'http://localhost:8080/user/favorites/'+props.trail_id;
