@@ -21,30 +21,6 @@ app.use('/', express.static('build'));
 app.use(bodyParser.json());
 
 
-// passport.use(new GoogleStrategy({
-//   clientID: config.googleAuth.clientID,
-//   clientSecret: config.googleAuth.clientSecret,
-//   callbackURL: config.googleAuth.callbackURL,
-//   },
-//   function(accessToken, refreshToken, profile, done) {
-//     User.find({
-//       'googleID': profile.id
-//     }, function(err, users) {
-//       if (!users.length) {
-//         User.create({
-//           googleID: profile.id,
-//           accessToken: accessToken,
-//           favorites: [],
-//           fullName: profile.displayName
-//         }, function(err, users) {
-//           return done(err, users[0]);
-//         });
-//       } else {
-//         return done(err, users);
-//       }
-//     });
-// }));
-
 passport.use(new GoogleStrategy({
   clientID: config.googleAuth.clientID,
   clientSecret: config.googleAuth.clientSecret,
@@ -93,17 +69,6 @@ app.get('/auth/google',
     scope: ['profile']
   }));
 
-// app.get('/auth/google/callback',
-//   passport.authenticate('google', {
-//     failureRedirect: '/',
-//     session: false
-//   }),
-//   function(req, res) {
-//     res.cookie("accessToken", req.user[0].accessToken, {expires: 0});
-//     res.redirect('/#/trails');
-//   }
-// );
-
 app.get('/auth/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/',
@@ -125,34 +90,34 @@ app.get('/user', passport.authenticate('bearer', {session: false}), function(req
   });
 });
 
-// passport.use(new GoogleStrategy({
-//   clientID: config.googleAuth.clientID,
-//   clientSecret: config.googleAuth.clientSecret,
-//   callbackURL: config.googleAuth.callbackURL,
-//   },
-//   function(accessToken, refreshToken, profile, done) {
-//     User.find({googleID: profile.id}, function(err, user) {
-//       if (!user.length) {
-//         User.create({
-//           googleID: profile.id,
-//           accessToken: accessToken,
-//           favorites: [],
-//           fullName: profile.displayName
-//         }, function(err, users) {
-//           return done(err, user);
-//         });
-//       } else {
-//         return done(err, user);
-//       }
-//     });
-// }));
+passport.use(new GoogleStrategy({
+  clientID: config.googleAuth.clientID,
+  clientSecret: config.googleAuth.clientSecret,
+  callbackURL: config.googleAuth.callbackURL,
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.find({googleID: profile.id}, function(err, user) {
+      if (!user.length) {
+        User.create({
+          googleID: profile.id,
+          accessToken: accessToken,
+          favorites: [],
+          fullName: profile.displayName
+        }, function(err, users) {
+          return done(err, user);
+        });
+      } else {
+        return done(err, user);
+      }
+    });
+}));
 
-
-// add to favorites
+// add to favorites (avoids duplicates)
 app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
   function(req, res) {
     console.log('Add Favorite Hit the Server!');
-    User.update({'googleID': req.params.googleID}, {'$push' : {'favorites': req.body.favorites}},
+    User.update({ 'googleID':req.params.googleID }, 
+                  { $addToSet : { 'favorites':req.body.favorites } },
       function(err, user) {
         if(err) {
           return res.send(err)
