@@ -31,11 +31,11 @@ var TrailsMain = React.createClass({
 			<div>
 				<h1><Link to={'/trails'} >MTB Trail Finder</Link></h1>
 				<div className="inputs">					
-					<button ><Link to={'/trails/favorites'}>Favorites</Link></button>
+					<Link to={'/trails/favorites'}><input type='button' value='Favorites' className='input-button' /></Link>
 					<div>
 						<Input />
 					</div>
-					<button ><a href='/logout'>Logout</a></button>
+					<a href='/logout'><input type='button' value='Logout' className='input-button' /></a>
 				</div>
 				<div className="display">
 					{this.props.children}
@@ -59,4 +59,8 @@ var TrailsMain = React.createClass({
 
 
 module.exports = TrailsMain;
+
+
+// <button ><Link to={'/trails/favorites'}>Favorites</Link></button>
+
 

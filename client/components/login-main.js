@@ -13,7 +13,7 @@ var Login = React.createClass({
 			<div>
 				<h1>MTB Trail Finder</h1>
 				<form onSubmit={this.fetchUser}>
-					<button type='submit'><a href="/auth/google">Login</a></button>
+					<a href="/auth/google"><input type='button' value='Login' className='input-button' /></a>
 					<p>Please login with your Google credentials so that we can provide you with a better experience!</p>
 				</form>
 			</div>

@@ -28,6 +28,6 @@ a {
 	color: black;
 }
 
-button {
+button, .input-button {
 	cursor: pointer;
 }

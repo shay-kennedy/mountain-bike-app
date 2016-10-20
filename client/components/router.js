@@ -14,7 +14,7 @@ var routes = (
 		<Router history={hashHistory} >
 			<Route path="/" component={Main} >
 				<IndexRoute component={Login} />
-				<Route path="/trails" component={TrailsMain}>
+				<Route path="/trails" component={TrailsMain} >
 					<Route path="list" component={TrailList} />
 					<Route path="favorites" component={TrailFavorites} />
 				</Route>
