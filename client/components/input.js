@@ -17,12 +17,8 @@ var Input = React.createClass({
 	render: function(){
 	return (
 		<div>
-			
-			<form onSubmit={this.onFormSubmit} >				
-					<input placeholder='Enter City and State' ref="location" />
-					<button type='submit'>Search</button>					
-			</form>
-			
+			<input placeholder='Enter City and State' ref="location" />
+			<button onClick={this.onFormSubmit} ><Link to={'/trails/list'} >Search</Link></button>					
 		</div>
 	);
 }});

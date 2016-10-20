@@ -1,7 +1,7 @@
 var React = require("react");
 var actions = require('../redux/actions');
 var connect = require('react-redux').connect;
-var TrailsMain = require('./main-trails');
+var TrailsMain = require('./trails-main');
 
 
 

@@ -29,6 +29,7 @@ var TrailsMain = React.createClass({
 		// });
 		return (
 			<div>
+				<h1><Link to={'/trails'} >MTB Trail Finder</Link></h1>
 				<div className="inputs">					
 					<button ><Link to={'/trails/favorites'}>Favorites</Link></button>
 					<div>
