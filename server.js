@@ -21,26 +21,48 @@ app.use('/', express.static('build'));
 app.use(bodyParser.json());
 
 
+// passport.use(new GoogleStrategy({
+//   clientID: config.googleAuth.clientID,
+//   clientSecret: config.googleAuth.clientSecret,
+//   callbackURL: config.googleAuth.callbackURL,
+//   },
+//   function(accessToken, refreshToken, profile, done) {
+//     User.find({
+//       'googleID': profile.id
+//     }, function(err, users) {
+//       if (!users.length) {
+//         User.create({
+//           googleID: profile.id,
+//           accessToken: accessToken,
+//           favorites: [],
+//           fullName: profile.displayName
+//         }, function(err, users) {
+//           return done(err, users[0]);
+//         });
+//       } else {
+//         return done(err, users);
+//       }
+//     });
+// }));
+
 passport.use(new GoogleStrategy({
   clientID: config.googleAuth.clientID,
   clientSecret: config.googleAuth.clientSecret,
   callbackURL: config.googleAuth.callbackURL,
   },
   function(accessToken, refreshToken, profile, done) {
-    User.find({
-      'googleID': profile.id
-    }, function(err, users) {
-      if (!users.length) {
+    User.find({googleID: profile.id}, function(err, user) {
+      if (!user.length) {
         User.create({
           googleID: profile.id,
           accessToken: accessToken,
           favorites: [],
           fullName: profile.displayName
         }, function(err, users) {
-          return done(err, users[0]);
+          return done(err, user);
         });
       } else {
-        return done(err, users);
+        return done(err, user);
       }
     });
 }));
@@ -55,7 +77,7 @@ passport.use(new BearerStrategy(
       if(!users) {
           return done(null, false)
       }
-      return done(null, users, { scope: ['read'] })
+      return done(null, users, { scope: 'read' })
     }
   );
 }
@@ -71,13 +93,24 @@ app.get('/auth/google',
     scope: ['profile']
   }));
 
+// app.get('/auth/google/callback',
+//   passport.authenticate('google', {
+//     failureRedirect: '/',
+//     session: false
+//   }),
+//   function(req, res) {
+//     res.cookie("accessToken", req.user[0].accessToken, {expires: 0});
+//     res.redirect('/#/trails');
+//   }
+// );
+
 app.get('/auth/google/callback',
   passport.authenticate('google', {
-    failureRedirect: '/failure',
+    failureRedirect: '/',
     session: false
   }),
   function(req, res) {
-    res.cookie("accessToken", req.user[0].accessToken, {expires: 0});
+    res.cookie('accessToken', req.user.accessToken, {expires: 0});
     res.redirect('/#/trails');
   }
 );
@@ -92,18 +125,17 @@ app.get('/user', passport.authenticate('bearer', {session: false}), function(req
   });
 });
 
-// app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
-//   function(req, res) {
-//     User.update({"googleID": req.params.googleID}, {"$push" : {"favorites": req.body.favorites}},
-//       function(err, user) {
-//         if(err) {
-//           return res.send(err)
-//         }
-//         console.log("response", user);
-//         return res.send(user);
-//       });
-//     console.log("body", req.body);
-//   });
+app.put('/user/favorites/:favorite_id', passport.authenticate('bearer', {session: false}),
+  function(req, res) {
+    User.update({"googleID": req.params.googleID}, {"$push" : {"favorites": req.body.favorites}},
+      function(err, user) {
+        if(err) {
+          return res.send(err)
+        }
+        return res.send({message: "Favorite added!"});
+      });
+    console.log("body", req.body);
+  });
 
 app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
   function(req, res) {

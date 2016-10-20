@@ -3,6 +3,7 @@ var connect = require('react-redux').connect;
 var actions = require('../redux/actions');
 var router = require('react-router');
 var Link = router.Link;
+
 	
 var Input = React.createClass({
 
@@ -11,7 +12,7 @@ var Input = React.createClass({
 		var location = this.refs.location.value;
 		// console.log('INPUT LOCATION', location);		
 		this.props.dispatch(actions.getTrails(location));
-		this.refs.location.value = '';
+		this.refs.location.value = '';	
 	},
 	render: function(){
 	return (
@@ -19,8 +20,7 @@ var Input = React.createClass({
 			
 			<form onSubmit={this.onFormSubmit} >				
 					<input placeholder='Enter City and State' ref="location" />
-					<button type='submit'>Search</button>
-								
+					<button type='submit'>Search</button>					
 			</form>
 			
 		</div>

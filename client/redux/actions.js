@@ -144,10 +144,10 @@ var removeFavorite = function(props) {
   console.log('ACTION SIDE PROPS', props)
   return function(dispatch) {
     var token = Cookies.get('accessToken');
-    var url = 'http://localhost:8080/user/favorite/'+props.favorite_id;
+    var url = 'http://localhost:8080/user/favorites/'+props.favorite_id;
   return fetch(url,
   {
-    method: 'delete',
+    method: 'put',
     headers: {'Content-type': 'application/json', 'Authorization': 'bearer ' + token}
   }
     ).then(function(response) {
@@ -159,7 +159,7 @@ var removeFavorite = function(props) {
       return response.json();
     })
     .then(function(user) {
-      console.log('Data', user)
+      console.log('RemoveFavorite Return', user)
       return dispatch(
         fetchUserSuccess(user)
         );
