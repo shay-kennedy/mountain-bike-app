@@ -31,3 +31,7 @@ a {
 button, .input-button {
 	cursor: pointer;
 }
+
+body {
+	margin: 20px;
+}
