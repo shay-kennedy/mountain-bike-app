@@ -11,7 +11,7 @@ var bodyParser = require("body-parser");
 
 var User = require('./server/models/user');
 
-// var config = require('./config');
+var config = require('./config');
 
 var db = 'mongodb://localhost:27017/mtb-trails';
 // var db = 'mongodb://' + config.mongoDB.dbPath;
@@ -161,7 +161,8 @@ app.get('/trails/:city/:state', function(req, res) {
   });
 });
 
+var port = process.env.PORT || 8080;
 
-app.listen(8080, function() {
+app.listen(port, function() {
   console.log('Listening at 8080!');
 });
