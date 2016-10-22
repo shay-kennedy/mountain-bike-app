@@ -91,28 +91,6 @@ app.get('/user', passport.authenticate('bearer', {session: false}), function(req
   });
 });
 
-passport.use(new GoogleStrategy({
-  clientID: config.googleAuth.clientID,
-  clientSecret: config.googleAuth.clientSecret,
-  callbackURL: config.googleAuth.callbackURL,
-  },
-  function(accessToken, refreshToken, profile, done) {
-    User.find({googleID: profile.id}, function(err, user) {
-      if (!user.length) {
-        User.create({
-          googleID: profile.id,
-          accessToken: accessToken,
-          favorites: [],
-          fullName: profile.displayName
-        }, function(err, users) {
-          return done(err, user);
-        });
-      } else {
-        return done(err, user);
-      }
-    });
-}));
-
 // add to favorites (avoids duplicates)
 app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
   function(req, res) {
