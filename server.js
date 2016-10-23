@@ -17,8 +17,8 @@ var User = require('./server/models/user');
 var config = require('./config');
 
 // Setup for DB connection
-var db = 'mongodb://localhost:27017/mtb-trails';
-// var db = 'mongodb://' + config.mongoDB.dbPath;
+// var db = 'mongodb://localhost:27017/mtb-trails';
+var db = 'mongodb://' + config.mongoDB.dbPath;
 mongoose.connect(db);
 
 app.use(passport.initialize());
