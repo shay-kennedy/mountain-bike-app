@@ -162,7 +162,7 @@ var removeFavorite = function(props) {
       return response.json();
     })
     .then(function(response) {
-      console.log('REMOVE FAVORITE RETURN', response)
+      console.log('REMOVE FAVORITE RETURN', response);
       return dispatch(
         fetchUserSuccess()
         );

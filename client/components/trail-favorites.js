@@ -30,7 +30,7 @@ var TrailFavorites = React.createClass({
 		});
 		return (
 			<div className="display">
-				<h2>Favorite Trails: </h2>
+				<h3 className="sub-header">FAVORITE TRAILS</h3>
 				{favoriteList}
 			</div>	
 		)

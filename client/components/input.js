@@ -20,11 +20,17 @@ var Input = React.createClass({
 	},
 	render: function(){
 	return (
-		<div>
-			<input placeholder='Enter City and State' ref="location" />
-			<button onClick={this.onSearch} >
-				<Link to={'/trails/list'} >Search</Link>
-			</button>					
+		<div className="row input">
+		  <div>
+		    <div className="input-group">
+		      <input type="text" className="form-control" placeholder="Enter City, State" ref="location" />
+		      <span className="input-group-btn">
+		        <button onClick={this.onSearch} className="btn btn-success btn-secondary" type="button" >
+							<Link to={'/trails/list'} className="search" >Search</Link>
+						</button>
+		      </span>
+		    </div>
+		  </div>
 		</div>
 	);
 }});
@@ -61,3 +67,9 @@ module.exports = Container;
 // 	</form>
 // </div>
 
+// <div>
+// 	<input placeholder='Enter City, State' ref="location" />
+// 	<button onClick={this.onSearch} className="btn btn-success" >
+// 		<Link to={'/trails/list'} className="search" >Search</Link>
+// 	</button>					
+// </div>

@@ -28,17 +28,23 @@ var TrailsMain = React.createClass({
 		// 	)
 		// });
 		return (
-			<div>
-				<h1><Link to={'/trails'} >MTB Trail Finder</Link></h1>
+			<div className="container trails-page">
+				<div className="row title-bar">					
+					<h1 className="page-title"><Link to={'/trails'} >MTB Trail Finder</Link></h1>	
+				</div>
 				<div className="inputs">					
-					<Link to={'/trails/favorites'}><input type='button' value='Favorites' className='input-button' /></Link>
-					<div>
+					<div className="input-field">
 						<Input />
 					</div>
-					<a href='/logout'><input type='button' value='Logout' className='input-button' /></a>
+					<div className="favorites-button">
+						<Link to={'/trails/favorites'}><input type='button' value='Favorites' className='input-button btn btn-success' /></Link>
+					</div>
 				</div>
 				<div className="display">
 					{this.props.children}
+				</div>
+				<div className="logout">
+					<a href='/logout' ><input type='button' value='Logout' className='input-button btn btn-warning' /></a>
 				</div>	
 			</div>
 		)

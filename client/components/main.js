@@ -4,7 +4,7 @@ var ReactDOM = require('react-dom');
 
 var Main = function(props) {
 	return (		
-		<div>
+		<div className="container">
 			{props.children}
 		</div>
 	)

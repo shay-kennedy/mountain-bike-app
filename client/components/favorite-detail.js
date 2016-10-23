@@ -7,9 +7,15 @@ var TrailsMain = require('./trails-main');
 
 var FavoriteDetail = React.createClass ({			
 	removeFromFavorites: function() {
-		// console.log('ITEM REMOVED');
-		this.props.dispatch(actions.removeFavorite(this.props));
-		this.props.dispatch(actions.fetchUser());
+		var contin = confirm('Are you sure you would like to remove this favorite?');
+		if (contin === true) {
+			console.log('ITEM REMOVED');
+			this.props.dispatch(actions.removeFavorite(this.props));
+			this.props.dispatch(actions.fetchUser());
+		} else {
+			return;
+		}
+		// alert('Favorite has been removed!');
 	},
 	render: function() {
 		// console.log('PROPS', this.props);
@@ -46,18 +52,25 @@ var FavoriteDetail = React.createClass ({
 		directions = directions.split('&quot;').join('"');
 		directions = directions.split('&amp;').join('&');
 		return (
-			<div>
-				<h3><a href={this.props.url} target="_blank"> {this.props.name} </a></h3>
-				<p>Location: {this.props.city}, {this.props.state}</p>
-				<p>Track Length: {this.props.length} miles</p>				
-				<p>Description: {description}</p>
-				<p>Directions: {directions}</p>
-				<button onClick={this.removeFromFavorites} >Remove from Favorites</button>
+			<div className="container rounded trails">
+				<div className="trail-top row">
+					<div className="col-xs">
+						<h3 className="trail-title"><a href={this.props.url} target="_blank"> {this.props.name} </a></h3>
+					</div>
+					<div className="col-xs">
+						<button onClick={this.removeFromFavorites} className="btn btn-outline-danger btn-sm" >Remove from Favorites</button>
+					</div>
+				</div>
+				<p><strong>Location:</strong> {this.props.city}, {this.props.state}</p>
+				<p><strong>Track Length:</strong> {this.props.length} miles</p>				
+				<p><strong>Description:</strong> {description}</p>
+				<p><strong>Directions:</strong> {directions}</p>		
 			</div>
 		)
 	}
 });
 
+// <button onClick={this.removeFromFavorites} className="btn btn-outline-danger btn-sm" >Remove from Favorites</button>
 // <p dangerouslySetInnerHTML={{__html: description}} />					
 // <p dangerouslySetInnerHTML={{__html: directions}} />
 

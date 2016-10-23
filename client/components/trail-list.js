@@ -30,7 +30,7 @@ var TrailList = React.createClass({
 		});
 		return (
 			<div className="display">
-				<h2>Trail list: </h2>
+				<h3 className="sub-header">TRAIL LIST</h3>
 				{trailList}
 			</div>	
 		)

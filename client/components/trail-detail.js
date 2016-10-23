@@ -7,8 +7,13 @@ var TrailsMain = require('./trails-main');
 
 var TrailDetail = React.createClass ({			
 	addToFavorites: function() {
-		console.log('ITEM ADDED');
-		this.props.dispatch(actions.addFavorite(this.props));
+		var contin = confirm('Are you sure you would like to add this favorite?');
+		if (contin === true) {
+			console.log('ITEM ADDED');
+			this.props.dispatch(actions.addFavorite(this.props));
+		} else {
+			return;
+		}	
 	},
 	render: function() {
 		// console.log('PROPS', this.props);
@@ -45,13 +50,20 @@ var TrailDetail = React.createClass ({
 		directions = directions.split('&quot;').join('"');
 		directions = directions.split('&amp;').join('&');
 		return (
-			<div>
-				<h3><a href={this.props.url} target="_blank"> {this.props.name} </a></h3>
-				<p>Location: {this.props.city}, {this.props.state}</p>
-				<p>Track Length: {this.props.length} miles</p>				
-				<p>Description: {description}</p>
-				<p>Directions: {directions}</p>
-				<button onClick={this.addToFavorites} >Add to Favorites</button>
+			<div className="container rounded trails">
+				<div className="trail-top row">
+					<div className="col-xs">
+						<h3 className="trail-title"><a href={this.props.url} target="_blank"> {this.props.name} </a></h3>
+					</div>
+					<div className="col-xs">
+						<button onClick={this.addToFavorites} className="btn btn-outline-success btn-sm">Add to Favorites</button>
+					</div>
+				</div>
+				<p><strong>Location:</strong> {this.props.city}, {this.props.state}</p>
+				<p><strong>Track Length:</strong> {this.props.length} miles</p>				
+				<p><strong>Description:</strong> {description}</p>
+				<p><strong>Directions:</strong> {directions}</p>
+				
 			</div>
 		)
 	}
