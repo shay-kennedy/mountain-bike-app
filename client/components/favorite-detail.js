@@ -6,6 +6,7 @@ var TrailsMain = require('./trails-main');
 
 
 var FavoriteDetail = React.createClass ({			
+	// Dispatches action to remove trail from favorites when you click the 'Remove from Favorites' button
 	removeFromFavorites: function() {
 		var contin = confirm('Are you sure you would like to remove this favorite?');
 		if (contin === true) {
@@ -15,10 +16,9 @@ var FavoriteDetail = React.createClass ({
 		} else {
 			return;
 		}
-		// alert('Favorite has been removed!');
 	},
 	render: function() {
-		// console.log('PROPS', this.props);
+		// Cleans up the API description and directions fields
 		var description = this.props.description;		
 		description = description.split('&lt;b&gt;').join(' ');
 		description = description.split('&lt;/b&gt;').join(' ');		
@@ -29,8 +29,8 @@ var FavoriteDetail = React.createClass ({
 		description = description.split('&lt;li&gt;').join(' ');
 		description = description.split('&lt;/li&gt;').join(' ');
 		description = description.split('&lt;ul&gt;').join(' ');
-		description = description.split('&lt;/ul&gt;').join(' ');		
-		// description = description.split('&lt;a href=*&gt;').join(' ');
+		description = description.split('&lt;/ul&gt;').join(' ');
+		description = description.split('&lt;br/&gt;').join(' ');		
 		description = description.split('&lt;br /&gt;').join(' ');
 		description = description.split('<br />').join(' ');
 		description = description.split('&quot;').join('"');
@@ -45,12 +45,13 @@ var FavoriteDetail = React.createClass ({
 		directions = directions.split('&lt;li&gt;').join(' ');
 		directions = directions.split('&lt;/li&gt;').join(' ');
 		directions = directions.split('&lt;ul&gt;').join(' ');
-		directions = directions.split('&lt;/ul&gt;').join(' ');		
-		// directions = directions.split('&lt;a href=*&gt;').join(' ');
+		directions = directions.split('&lt;/ul&gt;').join(' ');
+		directions = directions.split('&lt;br/&gt;').join(' ');		
 		directions = directions.split('&lt;br /&gt;').join(' ');
 		directions = directions.split('<br />').join(' ');
 		directions = directions.split('&quot;').join('"');
 		directions = directions.split('&amp;').join('&');
+		// Returns info for each items in the favorite trail list
 		return (
 			<div className="container rounded trails">
 				<div className="trail-top row">
@@ -70,9 +71,6 @@ var FavoriteDetail = React.createClass ({
 	}
 });
 
-// <button onClick={this.removeFromFavorites} className="btn btn-outline-danger btn-sm" >Remove from Favorites</button>
-// <p dangerouslySetInnerHTML={{__html: description}} />					
-// <p dangerouslySetInnerHTML={{__html: directions}} />
 
 var mapStateToProps = function(state, props) {
 	return {

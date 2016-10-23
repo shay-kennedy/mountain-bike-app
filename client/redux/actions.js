@@ -34,6 +34,7 @@ var getTrailsError = function(error) {
   };
 };
 
+// GET request for user info from DB with GoogleID and favorites
 var fetchUser = function() {
   return function(dispatch) {
     var token = Cookies.get('accessToken');
@@ -50,7 +51,6 @@ var fetchUser = function() {
       return response.json();
     })
     .then(function(user) {
-        // console.log("USER", user);
       return dispatch(
         fetchUserSuccess(user)
       );
@@ -63,15 +63,14 @@ var fetchUser = function() {
   }
 };
 
+// GET request trail info from the server-side API request based on location
 var getTrails = function(location) {
-  // console.log('Location', location);
   return function(dispatch) {
     var cityAndRest = location.split(',');
     var city = cityAndRest[0];
     var stateAndZip = cityAndRest[1].trim().split(' ');
     var state = stateAndZip[0];
     var zip = stateAndZip[1];
-    // console.log('CITY', city, 'STATE', state);
     var url = `http://localhost:8080/trails/${city}/${state}`;
     return fetch(url)
     .then(function(response) {
@@ -83,7 +82,6 @@ var getTrails = function(location) {
       return response.json();
     })
     .then(function(trails) {
-        // console.log("TRAILS", trails);
       return dispatch(
         getTrailsSuccess(trails)
       );
@@ -96,8 +94,8 @@ var getTrails = function(location) {
   }
 };
 
+// PUT request to add favorites to user schema 
 var addFavorite = function(props) {
-  // console.log('ADD FAVORITE PROPS', props)
   return function(dispatch) {
     var token = Cookies.get('accessToken');
     var url = 'http://localhost:8080/user/'+props.userId;
@@ -127,7 +125,6 @@ var addFavorite = function(props) {
       return response.json();
     })
     .then(function(response) {
-      console.log('ADD FAVORITE RETURN', response)
       return dispatch(
         fetchUserSuccess(response)
         );
@@ -140,8 +137,8 @@ var addFavorite = function(props) {
   }
 };
 
+// PUT request to remove favorites from user schema
 var removeFavorite = function(props) {
-  // console.log('REMOVE FAVORITE PROPS', props)
   return function(dispatch) {
     var token = Cookies.get('accessToken');
     var url = 'http://localhost:8080/user/favorites/'+props.trail_id;
@@ -162,7 +159,6 @@ var removeFavorite = function(props) {
       return response.json();
     })
     .then(function(response) {
-      console.log('REMOVE FAVORITE RETURN', response);
       return dispatch(
         fetchUserSuccess()
         );

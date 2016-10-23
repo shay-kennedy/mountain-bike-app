@@ -8,11 +8,9 @@ var TrailDetail = require('./trail-detail');
 var TrailList = React.createClass({
 	componentDidMount: function() {
 		this.props.dispatch(actions.fetchUser());
-		// console.log('CDM PROPS', this.props);
 	},
-
 	render: function(props) {
-		// console.log('TRAIL LIST PROPS', this.props);
+		// Maps through array of search results passing in props to TrailDetail componenet
 		var trailList = this.props.trails.places.map(function(trail) {
 			return (
 				<TrailDetail 
@@ -28,6 +26,7 @@ var TrailList = React.createClass({
 				/>
 			)
 		});
+		// Returns each trail item from the search trail array
 		return (
 			<div className="display">
 				<h3 className="sub-header">TRAIL LIST</h3>
@@ -47,7 +46,6 @@ var mapStateToProps = function(state, props) {
 }
 
 var Container = connect(mapStateToProps)(TrailList);
-
 
 module.exports = Container;
 

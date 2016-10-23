@@ -4,8 +4,8 @@ var connect = require('react-redux').connect;
 var TrailsMain = require('./trails-main');
 
 
-
 var TrailDetail = React.createClass ({			
+	// Dispatches action to add trail to favorites when you click the 'Add to Favorites' button
 	addToFavorites: function() {
 		var contin = confirm('Are you sure you would like to add this favorite?');
 		if (contin === true) {
@@ -16,7 +16,7 @@ var TrailDetail = React.createClass ({
 		}	
 	},
 	render: function() {
-		// console.log('PROPS', this.props);
+		// Cleans up the API description and directions fields
 		var description = this.props.description;		
 		description = description.split('&lt;b&gt;').join(' ');
 		description = description.split('&lt;/b&gt;').join(' ');		
@@ -27,8 +27,8 @@ var TrailDetail = React.createClass ({
 		description = description.split('&lt;li&gt;').join(' ');
 		description = description.split('&lt;/li&gt;').join(' ');
 		description = description.split('&lt;ul&gt;').join(' ');
-		description = description.split('&lt;/ul&gt;').join(' ');		
-		// description = description.split('&lt;a href=*&gt;').join(' ');
+		description = description.split('&lt;/ul&gt;').join(' ');
+		description = description.split('&lt;br/&gt;').join(' ');		
 		description = description.split('&lt;br /&gt;').join(' ');
 		description = description.split('<br />').join(' ');
 		description = description.split('&quot;').join('"');
@@ -43,12 +43,13 @@ var TrailDetail = React.createClass ({
 		directions = directions.split('&lt;li&gt;').join(' ');
 		directions = directions.split('&lt;/li&gt;').join(' ');
 		directions = directions.split('&lt;ul&gt;').join(' ');
-		directions = directions.split('&lt;/ul&gt;').join(' ');		
-		// directions = directions.split('&lt;a href=*&gt;').join(' ');
+		directions = directions.split('&lt;/ul&gt;').join(' ');
+		directions = directions.split('&lt;br/&gt;').join(' ');		
 		directions = directions.split('&lt;br /&gt;').join(' ');
 		directions = directions.split('<br />').join(' ');
 		directions = directions.split('&quot;').join('"');
 		directions = directions.split('&amp;').join('&');
+		// Returns info for each items in the trail search
 		return (
 			<div className="container rounded trails">
 				<div className="trail-top row">

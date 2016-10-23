@@ -1,27 +1,31 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+// Used for API request
 var unirest = require('unirest');
 
+// Passport strategies
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var BearerStrategy = require('passport-http-bearer').Strategy;
 
 var passport = require("passport");
 var bodyParser = require("body-parser");
 
+// User model schema
 var User = require('./server/models/user');
 
 var config = require('./config');
 
+// Setup for DB connection
 var db = 'mongodb://localhost:27017/mtb-trails';
 // var db = 'mongodb://' + config.mongoDB.dbPath;
-
 mongoose.connect(db);
+
 app.use(passport.initialize());
 app.use('/', express.static('build'));
 app.use(bodyParser.json());
 
-
+// Google OAuth Strategy
 passport.use(new GoogleStrategy({
   clientID: config.googleAuth.clientID,
   clientSecret: config.googleAuth.clientSecret,
@@ -44,27 +48,6 @@ passport.use(new GoogleStrategy({
     });
 }));
 
-passport.use(new BearerStrategy(
-  function(token, done) {
-  User.find({ accessToken: token },
-    function(err, users) {
-      if(err) {
-          return done(err)
-      }
-      if(!users) {
-          return done(null, false)
-      }
-      return done(null, users, { scope: 'read' })
-    }
-  );
-}
-));
-
-app.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
-});
-
 app.get('/auth/google',
   passport.authenticate('google', {
     scope: ['profile']
@@ -81,6 +64,11 @@ app.get('/auth/google/callback',
   }
 );
 
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
 app.get('/user', passport.authenticate('bearer', {session: false}), function(req, res) {
   User.find({}, function(err, users) {
     if (err) {
@@ -91,10 +79,26 @@ app.get('/user', passport.authenticate('bearer', {session: false}), function(req
   });
 });
 
-// add to favorites (avoids duplicates)
+// Bearer Strategy
+passport.use(new BearerStrategy(
+  function(token, done) {
+  User.find({ accessToken: token },
+    function(err, users) {
+      if(err) {
+          return done(err)
+      }
+      if(!users) {
+          return done(null, false)
+      }
+      return done(null, users, { scope: 'read' })
+    }
+  );
+}
+));
+
+// PUT: Add to favorites (avoids duplicates)
 app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
   function(req, res) {
-    console.log('Add Favorite Hit the Server!');
     User.update({ 'googleID':req.params.googleID }, 
                   { $addToSet : { 'favorites':req.body.favorites } },
       function(err, user) {
@@ -103,18 +107,13 @@ app.put('/user/:googleID', passport.authenticate('bearer', {session: false}),
         }
         return res.send({message: "Favorite added!"});
       });
-    // console.log("body", req.body);
   });
 
-// remove from favorites
+// PUT: Remove from favorites
 app.put('/user/favorites/:trail_id', passport.authenticate('bearer', {session: false}),
   function(req, res) {
-    console.log('Remove Favorite Hit the Server!');
-    console.log('req.body.googleID', req.body.googleID);
-    console.log('req.params.trail_id', req.params.trail_id);
     var trailID = parseInt(req.params.trail_id);
     var googleID = req.body.googleID;
-    console.log('QUERY INFO', trailID, googleID);
     User.update( { 'favorites.trail_id':trailID, 'googleID':googleID }, 
                   { $pull : { 'favorites':{ 'trail_id':trailID } } },
                   { new: true },
@@ -126,7 +125,7 @@ app.put('/user/favorites/:trail_id', passport.authenticate('bearer', {session: f
       });
   });
 
-// get API data for trails
+// GET: API data for trails
 app.get('/trails/:city/:state', function(req, res) {
   var city = req.params.city;
   var state = req.params.state;
@@ -134,7 +133,6 @@ app.get('/trails/:city/:state', function(req, res) {
   .header('X-Mashape-Key', 'Njf9yX0QmImshN5LtDdUS9MQcM68p1BVQxqjsna4e89QJjc3NI')
   .header('Accept', 'text/plain')
   .end(function (result) {
-    // res.redirect('/#/trails/list');
     return res.send(result.body);
   });
 });

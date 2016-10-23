@@ -6,13 +6,12 @@ var FavoriteDetail = require('./favorite-detail');
 
 
 var TrailFavorites = React.createClass({
+	// Dispatches request for user info, including favorite trail list
 	componentDidMount: function() {
 		this.props.dispatch(actions.fetchUser());
-		// console.log('CDM PROPS', this.props);
 	},
-
 	render: function(props) {
-		// console.log('Trail Favorites Props', this.props);
+		// Maps through array of favorite trail passing in props to FavoriteDetail componenet
 		var favoriteList = this.props.favorites.map(function(favorite) {
 			return (
 				<FavoriteDetail 
@@ -28,6 +27,7 @@ var TrailFavorites = React.createClass({
 				/>
 			)
 		});
+		// Returns each favorite trail item from the favorite trail array
 		return (
 			<div className="display">
 				<h3 className="sub-header">FAVORITE TRAILS</h3>
@@ -46,7 +46,6 @@ var mapStateToProps = function(state, props) {
 }
 
 var Container = connect(mapStateToProps)(TrailFavorites);
-
 
 module.exports = Container;
 

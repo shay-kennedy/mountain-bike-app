@@ -4,6 +4,7 @@ var connect = require('react-redux').connect;
 
 
 var Login = React.createClass({
+	// Dispatches request for user upon clicking 'Login' button
 	fetchUser: function(e) {
 		e.preventDefault();
 		this.props.dispatch(actions.fetchUser());
@@ -20,7 +21,6 @@ var Login = React.createClass({
 		)
 	}
 });
-
 
 
 var Container = connect()(Login);

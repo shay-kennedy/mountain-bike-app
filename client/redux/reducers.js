@@ -11,33 +11,31 @@ var reducer = function(state, action) {
 	state = state || initialState;
 	switch (action.type) {
 		
+		// Updates state upon fetch user success
 		case actions.FETCH_USER_SUCCESS:
-			console.log('FETCH_USER_SUCCESS');
+			// console.log('FETCH_USER_SUCCESS');
 			var user = action.user[0];
-			// console.log('REDUCER USER', user);
 			state = Object.assign({}, state, {
 				favorites: user.favorites,
 				googleID: user.googleID
 			});
-			// console.log('FETCH_USER_SUCCESS State', state);
 			return state;
 		
 		case action.FETCH_USER_ERROR:
-			console.log('FETCH_USER_ERROR');
+			// console.log('FETCH_USER_ERROR');
 			return state;
 		
+		// Updates state upon location trail search
 		case actions.GET_TRAILS_SUCCESS:
-			console.log('GET_TRAILS_SUCCESS');
-			// console.log('TRAILS FROM REDUCER', action.trails);
+			// console.log('GET_TRAILS_SUCCESS');
 			var trails = action.trails;
 			state = Object.assign({}, state, {
 				trails: trails,
 			});
-			// console.log('GET_TRAILS_SUCCESS State', state);
 			return state;
 
 		case action.GET_TRAILS_ERROR:
-			console.log('GET_TRAILS_ERROR');
+			// console.log('GET_TRAILS_ERROR');
 			return state;
 	
 	}

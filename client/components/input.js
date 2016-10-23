@@ -6,15 +6,14 @@ var Link = router.Link;
 
 	
 var Input = React.createClass({
-
+	// Dispatches the request to retreive trails upon clicking 'Search' button
 	onSearch: function(event){
 		event.preventDefault();
 		var location = this.refs.location.value;
 		if (location == '') {
 			alert('Please enter a location.');
 			return;
-		};
-		// console.log('INPUT LOCATION', location);		
+		};	
 		this.props.dispatch(actions.getTrails(location));
 		this.refs.location.value = '';	
 	},
