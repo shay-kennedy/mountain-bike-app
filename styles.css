@@ -39,6 +39,7 @@ input.form-control:focus {
 	padding: 1em;
 	border: .5px solid black;
 	background-color: #f5f5dc;
+	opacity: 0.8;
 }
 
 .login-page, .inputs {
