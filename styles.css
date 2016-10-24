@@ -7,9 +7,22 @@ button, .input-button {
 	cursor: pointer;
 }
 
+html {
+	/*background-image: url("https://static.pexels.com/photos/26559/pexels-photo-26559-large.jpg");*/
+	background-image: url("http://i.imgur.com/iXHO2Q3.jpg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
 body {
 	width: 85%;
 	margin: 2em auto;
+}
+
+#app, body {
+	background-color: transparent; 
 }
 
 .search, .search:hover {
