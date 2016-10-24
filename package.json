@@ -54,5 +54,8 @@
     "nodemon": "^1.10.2",
     "css-loader": "^0.25.0",
     "style-loader": "^0.13.1"
+  },
+  "engines": {
+    "node": "6.3.0"
   }
 }
