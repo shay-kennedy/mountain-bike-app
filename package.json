@@ -4,6 +4,7 @@
   "description": "",
   "main": "client/index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "mocha --compilers js:babel-register test/**/*.js*",
     "mkdir": "mkdir -p build",
     "clean": "rm -rf build",
