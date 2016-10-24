@@ -8,7 +8,7 @@
     "mkdir": "mkdir -p build",
     "clean": "rm -rf build",
     "build": "npm run clean && npm run mkdir && npm run build:html && npm run build:js",
-    "serve": "node server.js",
+    "serve": "nodemon server.js",
     "watch": "npm run watch:html & npm run watch:js",
     "watch:html": "npm run build:html && chokidar index.html -c 'npm run build:html'",
     "build:html": "npm run clean:html && cp index.html build/",

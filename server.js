@@ -18,7 +18,7 @@ var config = require('./config');
 
 // Setup for DB connection
 // var db = 'mongodb://localhost:27017/mtb-trails';
-var db = 'mongodb://' + config.mongoDB.dbPath;
+var db = process.env.DBPATH || config.mongoDB.dbPath;
 mongoose.connect(db);
 
 app.use(passport.initialize());
@@ -27,9 +27,9 @@ app.use(bodyParser.json());
 
 // Google OAuth Strategy
 passport.use(new GoogleStrategy({
-  clientID: config.googleAuth.clientID,
-  clientSecret: config.googleAuth.clientSecret,
-  callbackURL: config.googleAuth.callbackURL,
+  clientID: process.env.CLIENTID || config.googleAuth.clientID,
+  clientSecret: process.env.CLIENSECRET || config.googleAuth.clientSecret,
+  callbackURL: process.env.CALLBACKURL || config.googleAuth.callbackURL,
   },
   function(accessToken, refreshToken, profile, done) {
     User.find({googleID: profile.id}, function(err, user) {
